@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- =====================================================
+         כותרת העמוד שמופיעה בלשונית של הדפדפן
+         ===================================================== -->
+    <title>העלאת סרטון או תמונה</title>
+
+    <!-- =====================================================
+         הגדרת viewport כדי שהעמוד ייראה טוב גם בנייד
+         ===================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- =====================================================
+         noindex כדי לבקש ממנועי חיפוש לא לאנדקס את העמוד
+         ===================================================== -->
+    <meta name="robots" content="noindex, nofollow, noarchive">
+
+    <style>
+        /* =====================================================
+           עיצוב בסיסי לעמוד
+           ===================================================== */
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7fb;
+            margin: 0;
+            padding: 0;
+            color: #222;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 40px auto;
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 30px;
+        }
+
+        p.description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        form p {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        select,
+        input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        input[type="checkbox"] {
+            margin-left: 8px;
+            transform: scale(1.2);
+        }
+
+        .helptext {
+            display: block;
+            margin-top: 6px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .errorlist {
+            background: #ffe7e7;
+            color: #900;
+            border: 1px solid #e0a0a0;
+            padding: 10px 14px;
+            border-radius: 10px;
+            list-style: none;
+            margin: 8px 0 0 0;
+        }
+
+        button {
+            background: #2d6cdf;
+            color: white;
+            border: none;
+            padding: 14px 22px;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1f57b7;
+        }
+
+        .note {
+            margin-top: 24px;
+            padding: 14px;
+            background: #f2f6ff;
+            border-radius: 12px;
+            color: #333;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- =================================================
+             כותרת ראשית של העמוד
+             ================================================= -->
+        <h1>העלאת סרטון או תמונה</h1>
+
+        <!-- =================================================
+             טקסט הסבר קצר לתלמידים
+             ================================================= -->
+        <p class="description">
+            כאן אפשר להעלות סרטון או תמונה למשימה.
+            ההעלאה תישמר במערכת, ותתפרסם רק אחרי בדיקה ואישור.
+        </p>
+
+        <!-- =================================================
+             טופס ההעלאה
+             =================================================
+             method="post" אומר שהטופס שולח נתונים לשרת
+             enctype="multipart/form-data" חובה כשמעלים קבצים
+             {% csrf_token %} מגן מפני CSRF
+             ================================================= -->
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- =============================================
+                 מעבר על כל שדה בטופס והצגתו אחד אחד
+                 כך אפשר להציג label, שגיאות, help text
+                 ============================================= -->
+            {% for field in form %}
+                <p>
+                    {{ field.label_tag }}
+                    {{ field }}
+
+                    {% if field.help_text %}
+                        <span class="helptext">{{ field.help_text }}</span>
+                    {% endif %}
+
+                    {% for error in field.errors %}
+                        <ul class="errorlist">
+                            <li>{{ error }}</li>
+                        </ul>
+                    {% endfor %}
+                </p>
+            {% endfor %}
+
+            <!-- =============================================
+                 כפתור שליחת הטופס
+                 ============================================= -->
+            <button type="submit">שליחת הקובץ</button>
+        </form>
+
+        <!-- =================================================
+             הערת פרטיות קצרה
+             ================================================= -->
+        <div class="note">
+            נא להעלות רק קבצים שקיבלו אישור מתאים. מומלץ למלא שם פרטי או כינוי בלבד.
+        </div>
+    </div>
+</body>
+</html>

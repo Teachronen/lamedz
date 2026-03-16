@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- כותרת הדף -->
+    <title>גלריית ההעלאות</title>
+
+    <!-- התאמה לנייד -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- בקשה ממנועי חיפוש לא לאנדקס -->
+    <meta name="robots" content="noindex, nofollow, noarchive">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7fb;
+            margin: 0;
+            padding: 0;
+            color: #222;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 24px;
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 34px;
+        }
+
+        .description {
+            color: #555;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .top-links {
+            margin-bottom: 24px;
+        }
+
+        .top-links a {
+            display: inline-block;
+            margin-left: 10px;
+            text-decoration: none;
+            background: #2d6cdf;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 10px;
+        }
+
+        .top-links a:hover {
+            background: #1f57b7;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .media-wrapper {
+            background: #eee;
+        }
+
+        .media-wrapper img,
+        .media-wrapper video {
+            width: 100%;
+            display: block;
+            max-height: 360px;
+            object-fit: cover;
+            background: #000;
+        }
+
+        .card-body {
+            padding: 18px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0 0 10px 0;
+        }
+
+        .meta {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .date {
+            color: #888;
+            font-size: 13px;
+        }
+
+        .empty-state {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- כותרת העמוד -->
+    <h1>גלריית ההעלאות</h1>
+
+    <p class="description">
+        כאן מופיעים רק סרטונים ותמונות שאושרו לפרסום.
+    </p>
+
+    <!-- קישורים עליונים -->
+    <div class="top-links">
+        <a href="/upload/">להעלאה חדשה</a>
+    </div>
+
+    <!-- אם יש העלאות מאושרות -->
+    {% if submissions %}
+        <div class="grid">
+
+            <!-- מעבר על כל ההעלאות -->
+            {% for submission in submissions %}
+                <div class="card">
+
+                    <!-- אזור המדיה -->
+                    <div class="media-wrapper">
+
+                        <!-- אם זו תמונה, נשתמש בתג img -->
+                        {% if submission.media_type == "image" %}
+                            <img src="{{ submission.media_file.url }}" alt="{{ submission.title }}">
+
+                        <!-- אם זה וידאו, נשתמש בתג video -->
+                        {% elif submission.media_type == "video" %}
+                            <video controls preload="metadata">
+                                <source src="{{ submission.media_file.url }}">
+                                הדפדפן שלך לא תומך בניגון וידאו.
+                            </video>
+                        {% endif %}
+
+                    </div>
+
+                    <!-- אזור הטקסט של הכרטיס -->
+                    <div class="card-body">
+
+                        <!-- כותרת ההעלאה -->
+                        <div class="card-title">
+                            {{ submission.title }}
+                        </div>
+
+                        <!-- מידע בסיסי -->
+                        <div class="meta">
+                            {{ submission.student_name }} | {{ submission.class_name }}
+                        </div>
+
+                        <!-- תאריך העלאה -->
+                        <div class="date">
+                            הועלה בתאריך: {{ submission.created_at|date:"d/m/Y H:i" }}
+                        </div>
+
+                    </div>
+
+                </div>
+            {% endfor %}
+
+        </div>
+
+    <!-- אם אין עדיין העלאות מאושרות -->
+    {% else %}
+        <div class="empty-state">
+            <h2>עדיין אין תכנים מאושרים</h2>
+            <p>כשיאושרו סרטונים או תמונות, הם יופיעו כאן.</p>
+        </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
