@@ -50,4 +50,6 @@ urlpatterns = [
     # שם נציג רק קבצים שאושרו.
     # -----------------------------------------------------
     path("gallery/", views.gallery, name="gallery"),
+
+    path("password/", views.password_gate, name="password_gate"),
 ]
