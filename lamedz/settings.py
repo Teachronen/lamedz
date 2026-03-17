@@ -121,6 +121,6 @@ STATIC_URL = 'static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-ALLOWED_HOSTS = ["159.69.203.197", "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ["159.69.203.197", "127.0.0.1", "localhost", "lamedz.deeplearninghuman.com",]
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
